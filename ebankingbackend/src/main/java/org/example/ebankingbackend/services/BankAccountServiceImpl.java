@@ -44,6 +44,7 @@ public class BankAccountServiceImpl implements BankAccountService{
         savingAccount.setCreatedAt(new Date());
         savingAccount.setInterestRate(interestRate);
         savingAccount.setCustomer(customer);
+        savingAccount.setCurrency("DH");
         SavingAccount saveBankAccount= BankAccountRepository.save(savingAccount);
         return saveBankAccount;
     }
@@ -59,6 +60,7 @@ public class BankAccountServiceImpl implements BankAccountService{
         currentAccount.setBalance(initialBalance);
         currentAccount.setCreatedAt(new Date());
         currentAccount.setOverdraft(overDraft);
+        currentAccount.setCurrency("DH");
         currentAccount.setCustomer(customer);
         CurrentAccount saveBankAccount = BankAccountRepository.save(currentAccount);
         return saveBankAccount;
@@ -89,6 +91,7 @@ public class BankAccountServiceImpl implements BankAccountService{
         accountOperation.setAmount(amount);
         accountOperation.setOperationDate(new Date());
         accountOperation.setBankAccount(bankAccount);
+        accountOperation.setDescription(description);
         accountOperationRepository.save(accountOperation);
         bankAccount.setBalance(bankAccount.getBalance() - amount);
         BankAccountRepository.save(bankAccount);
@@ -103,6 +106,7 @@ public class BankAccountServiceImpl implements BankAccountService{
         accountOperation.setAmount(amount);
         accountOperation.setOperationDate(new Date());
         accountOperation.setBankAccount(bankAccount);
+        accountOperation.setDescription(description);
         accountOperationRepository.save(accountOperation);
         bankAccount.setBalance(bankAccount.getBalance()+amount);
         BankAccountRepository.save(bankAccount);

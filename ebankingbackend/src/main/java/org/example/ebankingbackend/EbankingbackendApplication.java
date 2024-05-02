@@ -3,15 +3,20 @@ package org.example.ebankingbackend;
 import org.example.ebankingbackend.entities.*;
 import org.example.ebankingbackend.enums.AccountStatus;
 import org.example.ebankingbackend.enums.OperationType;
+import org.example.ebankingbackend.exceptions.BalanceNotSufficientException;
+import org.example.ebankingbackend.exceptions.BankAccountNotFoundException;
+import org.example.ebankingbackend.exceptions.CustomerNotFoundException;
 import org.example.ebankingbackend.repositories.AccountOperationRepository;
 import org.example.ebankingbackend.repositories.BankAccountRepository;
 import org.example.ebankingbackend.repositories.CustomerRepository;
+import org.example.ebankingbackend.services.BankAccountService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -22,35 +27,32 @@ public class EbankingbackendApplication {
         SpringApplication.run(EbankingbackendApplication.class, args);
     }
     @Bean
-    CommandLineRunner commandLineRunner(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository, AccountOperationRepository accountOperationRepository){
+    CommandLineRunner commandLineRunner(BankAccountService bankAccountService) {
         return args -> {
-            BankAccount bankAccount = bankAccountRepository.findById("40e6c4df-56b2-4d43-923b-42073aff3d7a").orElse(null);
-            if (bankAccount != null) {
-                bankAccount.setBalance(1000);
-                bankAccountRepository.save(bankAccount);
-                System.out.println("*******************");
-                System.out.println(bankAccount.getId());
-                System.out.println(bankAccount.getBalance());
-                System.out.println(bankAccount.getStatus());
-                System.out.println(bankAccount.getCreatedAt());
-                System.out.println(bankAccount.getCustomer().getName());
-                System.out.println(bankAccount.getClass().getSimpleName());
-                if (bankAccount instanceof CurrentAccount) {
-                    CurrentAccount currentAccount = (CurrentAccount) bankAccount;
-                    System.out.println("Over Draft=>" + currentAccount.getOverdraft());
-                } else if (bankAccount instanceof SavingAccount) {
-                    SavingAccount savingAccount = (SavingAccount) bankAccount;
-                    System.out.println("Rate =>" + savingAccount.getInterestRate());
-                }
+          Stream.of("Hassan", "Yassine", "Anas").forEach(name -> {
+              Customer customer = new Customer();
+              customer.setName(name);
+              customer.setEmail(name + "@gmail.com");
+              bankAccountService.saveCustomer(customer);
+          });
+          bankAccountService.listCustomers().forEach(cust -> {
+              try {
+                  bankAccountService.saveCurrentBankAccount(Math.random() * 90000, 5.5, cust.getId());
+                  bankAccountService.saveSavingBankAccount(Math.random() * 15000, 9000, cust.getId());
+                  List<BankAccount> bankAccounts =  bankAccountService.bankAccountList();
+                  for(BankAccount bankAccount : bankAccounts) {
+                      for (int i = 0; i < 10; i++) {
+                          bankAccountService.credit(bankAccount.getId(), 10000+Math.random() * 12000, "Credit");
+                          bankAccountService.debit(bankAccount.getId(), 1000+Math.random() * 9000, "Debit");
+                      }
+                  }
+              }catch (CustomerNotFoundException e) {
+                  e.printStackTrace();
+              }catch (BankAccountNotFoundException | BalanceNotSufficientException e) {
+                  e.printStackTrace();
+              }
 
-                bankAccount.getAccountOperations().forEach(op -> {
-                    System.out.println(op.getId() + "\t" + op.getOperationDate() + "\t" + op.getAmount() + "\t" + op.getType());
-                });
-            }else {
-                System.out.println("Bank Account Not Found");
-            }
-
-
+          });
 
         };
     }
