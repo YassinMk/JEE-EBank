@@ -11,13 +11,13 @@ import org.example.ebankingbackend.enums.AccountStatus;
 import java.util.Date;
 import java.util.List;
 @Data
-public class SavingBankAccountDTO {
+public class SavingBankAccountDTO extends BankAccountDTO {
         private String id ;
         private double balance;
         private Date createdAt;
         private AccountStatus status;
         private String currency;
-        private CustomerDTO customer;
+        private CustomerDTO customerDTO;
         private double interestRate;
 }
 

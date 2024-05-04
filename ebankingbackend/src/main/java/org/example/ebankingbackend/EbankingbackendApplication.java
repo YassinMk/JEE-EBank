@@ -1,6 +1,9 @@
 package org.example.ebankingbackend;
 
+import org.example.ebankingbackend.dtos.BankAccountDTO;
+import org.example.ebankingbackend.dtos.CurrentBankAccountDTO;
 import org.example.ebankingbackend.dtos.CustomerDTO;
+import org.example.ebankingbackend.dtos.SavingBankAccountDTO;
 import org.example.ebankingbackend.entities.*;
 import org.example.ebankingbackend.enums.AccountStatus;
 import org.example.ebankingbackend.enums.OperationType;
@@ -40,11 +43,17 @@ public class EbankingbackendApplication {
               try {
                   bankAccountService.saveCurrentBankAccount(Math.random() * 90000, 5.5, cust.getId());
                   bankAccountService.saveSavingBankAccount(Math.random() * 15000, 9000, cust.getId());
-                  List<BankAccount> bankAccounts =  bankAccountService.bankAccountList();
-                  for(BankAccount bankAccount : bankAccounts) {
+                  List<BankAccountDTO> bankAccounts =  bankAccountService.bankAccountList();
+                  for(BankAccountDTO bankAccount : bankAccounts) {
                       for (int i = 0; i < 10; i++) {
-                          bankAccountService.credit(bankAccount.getId(), 10000+Math.random() * 12000, "Credit");
-                          bankAccountService.debit(bankAccount.getId(), 1000+Math.random() * 9000, "Debit");
+                          String accountId;
+                          if(bankAccount instanceof SavingBankAccountDTO){
+                                accountId = ((SavingBankAccountDTO) bankAccount).getId();
+                          }else {
+                              accountId = ((CurrentBankAccountDTO) bankAccount).getId();
+                          }
+                          bankAccountService.credit(accountId, 10000+Math.random() * 12000, "Credit");
+                          bankAccountService.debit(accountId, 1000+Math.random() * 9000, "Debit");
                       }
                   }
               }catch (CustomerNotFoundException e) {
