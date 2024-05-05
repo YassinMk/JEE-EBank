@@ -24,6 +24,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 
+
 @Service
 @Transactional
 @AllArgsConstructor
@@ -184,7 +185,7 @@ public class BankAccountServiceImpl implements BankAccountService{
         if (bankAccount == null) {
             throw new BankAccountNotFoundException("Bank Account not found");
         }
-        Page<AccountOperation> accountOperations = accountOperationRepository.findByBankAccountId(accountId, (Pageable) PageRequest.of(page, size));
+        Page<AccountOperation> accountOperations = accountOperationRepository.findByBankAccountId(accountId,  PageRequest.of(page, size));
         AccountHistoryDTO accountHistoryDTO = new AccountHistoryDTO();
         List<AccountOperationDTO> accountOperationDTOs = accountOperations.getContent().stream().map(op -> dtoMapper.toAccountOperationDTO(op)).collect(Collectors.toList());
         accountHistoryDTO.setAccountOperationDTOS(accountOperationDTOs);
@@ -194,6 +195,15 @@ public class BankAccountServiceImpl implements BankAccountService{
         accountHistoryDTO.setCurrrentPage(page);
         accountHistoryDTO.setTotalPages(accountOperations.getTotalPages());
         return accountHistoryDTO;
+    }
+
+    @Override
+    public List<CustomerDTO> searchCustomers(String keyword) {
+        List<Customer> customers = customerRepository.findByNameContaining(keyword);
+        List<CustomerDTO> customerDTOS = customers.stream().map(cust ->
+                dtoMapper.fromCustomer(cust)).collect(Collectors.toList());
+        return customerDTOS;
+
     }
 }
 

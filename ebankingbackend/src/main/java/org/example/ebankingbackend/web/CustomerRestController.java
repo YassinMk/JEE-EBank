@@ -42,4 +42,8 @@ public class CustomerRestController {
         log.info("Deleting customer with id {}", customerId);
         bankAccountService.deleteCustomer(customerId);
     }
+    @GetMapping("/customers/search")
+    public List<CustomerDTO> searchCustomers(@RequestParam (name = "keyword", defaultValue = "") String keyword){
+        return bankAccountService.searchCustomers(keyword);
+    }
 }
