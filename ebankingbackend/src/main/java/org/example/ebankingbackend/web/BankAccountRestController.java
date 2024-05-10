@@ -7,6 +7,7 @@ import org.example.ebankingbackend.entities.BankAccount;
 import org.example.ebankingbackend.exceptions.BalanceNotSufficientException;
 import org.example.ebankingbackend.exceptions.BankAccountNotFoundException;
 import org.example.ebankingbackend.services.BankAccountService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
