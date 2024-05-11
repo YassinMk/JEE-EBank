@@ -28,7 +28,7 @@ export class AuthService {
     this.isAuthenticated = true;
     let decodedJwt:any = jwtDecode(this.accessToken);
     this.username = decodedJwt.sub;
-    this.roles = decodedJwt.scopes;
+    this.roles = decodedJwt.scope;
     window.localStorage.setItem("jwt-token",this.accessToken);
 
   }
@@ -43,8 +43,10 @@ export class AuthService {
   loadJwtTokenFromLocalStorage() {
     let token = window.localStorage.getItem("jwt-token");
     if (token) {
-      this.laodProfile({"access_token":token})
+      this.laodProfile({"access_token": token})
       this.route.navigateByUrl("/admin/customers");
+    }else{
+      this.route.navigateByUrl("/login");
     }
   }
 }
