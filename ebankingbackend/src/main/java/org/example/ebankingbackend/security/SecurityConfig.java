@@ -50,7 +50,7 @@ public class SecurityConfig {
                         .build(),
                 User.withUsername("admin")
                         .password(passwordEncoder.encode("12345"))
-                        .authorities("ADMIN","ADMIN")
+                        .authorities("ADMIN","USER","SCOPE_USER","SCOPE_ADMIN")
                         .build()
         );
     }
