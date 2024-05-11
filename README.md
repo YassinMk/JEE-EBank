@@ -11,18 +11,20 @@ The EBank project  backend is a Spring Boot application that provides RESTful AP
 
 
 
-## Class Diagram
+## Class Diagram///*//--
 
--Account: This class might have attributes like accountId, balance, account type, and methods like debit(), credit(), transfer().  
--Customer: This class might have attributes like customer, name, address, email, and methods like addAccount(), removeAccount().  
--Transaction: This class might have attributes like transactionId, amount, transactionType, date, and methods like execute().
+-**Account**: This class might have attributes like accountId, balance, account type, and methods like debit(), credit(), transfer().  
+-**Customer**: This class might have attributes like customer, name, address, email, and methods like addAccount(), removeAccount().  
+-**Transaction**: This class might have attributes like transactionId, amount, transactionType, date, and methods like execute().
 
-These enums are used to restrict the possible values for certain fields in the application.
+These enums are used to restrict the possible values for certain fields in the application : 
 
--AccountStatus: This enum represents the status of a bank account. It can have values like ACTIVE, INACTIVE, SUSPENDED, etc.
--OperationType: This enum represents the type of operation performed on a bank account. It can have values like DEPOSIT, WITHDRAWAL, TRANSFER, etc.
+-**AccountStatus**: This enum represents the status of a bank account. It can have values like ACTIVE, INACTIVE, SUSPENDED, etc.
 
-![image](https://github.com/YassinMk/JEE-EBank/assets/122708120/017de05f-fcad-42fa-bcc9-cd9d39d6e3a1)
+-**OperationType**: This enum represents the type of operation performed on a bank account, It can have values like DEPOSIT, WITHDRAWAL, TRANSFER, etc.
+
+![image](https://github.com/YassinMk/JEE-EBank/assets/122708120/f0898e01-a232-46e3-895e-e193fbe7d9d6)
+
 
 
 ## Project Structure
