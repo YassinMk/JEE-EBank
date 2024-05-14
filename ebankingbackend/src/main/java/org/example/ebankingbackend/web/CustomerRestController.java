@@ -18,7 +18,6 @@ import java.util.List;
 public class CustomerRestController {
     private BankAccountService bankAccountService;
     @GetMapping("/customers")
-    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public List<CustomerDTO> getCustomers(){
         log.info("Getting all customers");
         return bankAccountService.listCustomers();
